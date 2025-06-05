@@ -15,11 +15,39 @@ Each strategy's visualization shows how the aircraft fills step by step, with he
 
 ## Files
 
+### Back-to-Front Strategy
 - `group1_boarding.tex`: First boarding group (Rows 28-32)
 - `group2_boarding.tex`: Second boarding group (Rows 33-37)
 - `group3_boarding.tex`: Third boarding group (Rows 38-43)
 - `group4_boarding.tex`: Fourth boarding group (Rows 44-48)
 
-## Based on Research
+### Other Strategies
+- `window_middle_aisle_boarding.tex`: Complete outside-in boarding strategy
+- `hybrid_strategy.tex`: Combined back-to-front and outside-in boarding strategy
+
+### Comparison
+- `strategy_comparison.tex`: Visual and statistical comparison of all boarding strategies
+
+## Compilation
+
+To compile these LaTeX files:
+
+1. Install a LaTeX distribution like TeX Live or MiKTeX
+2. Compile each `.tex` file with `pdflatex`:
+   ```
+   pdflatex group1_boarding.tex
+   ```
+3. The resulting PDF will show the heatmap visualization
+
+## Research Basis
 
 This visualization is based on research from "Optimising Passenger Boarding in Aircraft Through a Mathematical Modeling" which analyzes different boarding strategies using mathematical models.
+
+## Boarding Time Results
+
+Strategy | Approximate Boarding Time
+---------|---------------------------
+Back-to-Front | 12 minutes
+Outside-In (Window-Middle-Aisle) | 10 minutes
+Hybrid Strategy | 10 minutes
+Random | 22 minutes
