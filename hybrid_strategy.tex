@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage[landscape, margin=1cm]{geometry}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\begin{document}
+
+\begin{center}
+  \huge Aircraft Boarding Strategy Visualization\\
+  \Large Hybrid Boarding Strategy
+\end{center}
+
+\begin{figure}[ht]
+  \centering
+  \caption{Aircraft Seating Heatmap: Hybrid Boarding Strategy}
+  \label{fig:hybrid-heatmap}
+  \begin{tikzpicture}[scale=0.8]
+    % Seat columns labels (A-F)
+    \foreach \col[count=\j from 1] in {A,B,C,D,E,F}{
+      \node[font=\large\bfseries] at (\j-0.5,0.5) {\col};
+    }
+    
+    % Row labels (28-48)
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \node[font=\large\bfseries, right] at (0,\i*(-1)) {\r};
+    }
+    
+    % Draw seats with different colors based on hybrid boarding sequence
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      
+      % Group seats by zone and type
+      \pgfmathtruncatemacro{\zone}{0}
+      \ifnum\r<38
+        \pgfmathtruncatemacro{\zone}{1} % Back zone (rows 28-37)
+      \else
+        \ifnum\r<44
+          \pgfmathtruncatemacro{\zone}{2} % Middle zone (rows 38-43)
+        \else
+          \pgfmathtruncatemacro{\zone}{3} % Front zone (rows 44-48)
+        \fi
+      \fi
+      
+      % Calculate boarding priority and color
+      % 1-3: Back zone (Window, Middle, Aisle)
+      % 4-6: Middle zone (Window, Middle, Aisle)
+      % 7-9: Front zone (Window, Middle, Aisle)
+      
+      % Window seats (A, F)
+      \pgfmathtruncatemacro{\windowPriority}{\zone}
+      \pgfmathsetmacro{\windowColor}{0.9-\windowPriority*0.1}
+      \fill[blue!\windowColor*100] (0,-\i) rectangle ++(1,-1);
+      \fill[blue!\windowColor*100] (5,-\i) rectangle ++(1,-1);
+      
+      % Middle seats (B, E)
+      \pgfmathtruncatemacro{\middlePriority}{\zone+3}
+      \pgfmathsetmacro{\middleColor}{0.9-\middlePriority*0.1}
+      \fill[green!\middleColor*100] (1,-\i) rectangle ++(1,-1);
+      \fill[green!\middleColor*100] (4,-\i) rectangle ++(1,-1);
+      
+      % Aisle seats (C, D)
+      \pgfmathtruncatemacro{\aislePriority}{\zone+6}
+      \pgfmathsetmacro{\aisleColor}{0.9-\aislePriority*0.1}
+      \fill[orange!\aisleColor*100] (2,-\i) rectangle ++(1,-1);
+      \fill[orange!\aisleColor*100] (3,-\i) rectangle ++(1,-1);
+      
+      % Draw grid lines
+      \foreach \j in {1,...,6}{
+        \draw[thick] (\j-1,-\i) rectangle ++(1,-1);
+      }
+    }
+    
+    % Draw aisle indication
+    \draw[dashed, thick] (3.5, 0) -- (3.5, -22);
+    
+    % Legend
+    \node[anchor=west, align=left, font=\small] at (7, -5) {
+      \textbf{Boarding Sequence:}\\
+      \textcolor{blue!90}{$\blacksquare$} 1. Back Window seats\\
+      \textcolor{blue!80}{$\blacksquare$} 2. Middle Window seats\\
+      \textcolor{blue!70}{$\blacksquare$} 3. Front Window seats\\
+      \textcolor{green!90}{$\blacksquare$} 4. Back Middle seats\\
+      \textcolor{green!80}{$\blacksquare$} 5. Middle Middle seats\\
+      \textcolor{green!70}{$\blacksquare$} 6. Front Middle seats\\
+      \textcolor{orange!90}{$\blacksquare$} 7. Back Aisle seats\\
+      \textcolor{orange!80}{$\blacksquare$} 8. Middle Aisle seats\\
+      \textcolor{orange!70}{$\blacksquare$} 9. Front Aisle seats
+    };
+    
+    % Title
+    \node[align=center, font=\large\bfseries] at (3.5, 1.5) {Boeing 737-800 Economy Class\\Hybrid Boarding Strategy};
+    
+    % Explanation
+    \node[align=center, font=\normalsize] at (3.5, -23) {
+      This strategy combines outside-in and back-to-front methods\\
+      for optimal boarding efficiency.
+    };
+    
+  \end{tikzpicture}
+\end{figure}
+
+\begin{center}
+  \Large Benefits of Hybrid Boarding Strategy
+\end{center}
+
+\begin{itemize}
+  \item Combines the advantages of both outside-in and back-to-front strategies
+  \item Minimizes both in-row interference and aisle congestion
+  \item Achieves approximately the same boarding time as outside-in (10 minutes)
+  \item Maintains systematic and organized boarding process
+  \item Provides better passenger experience by reducing wait times
+\end{itemize}
+
+\begin{center}
+  \Large Implementation Details
+\end{center}
+
+The boarding process follows this sequence:
+\begin{enumerate}
+  \item Back window seats (rows 28-37, seats A \& F)
+  \item Middle window seats (rows 38-43, seats A \& F)
+  \item Front window seats (rows 44-48, seats A \& F)
+  \item Back middle seats (rows 28-37, seats B \& E)
+  \item Middle middle seats (rows 38-43, seats B \& E)
+  \item Front middle seats (rows 44-48, seats B \& E)
+  \item Back aisle seats (rows 28-37, seats C \& D)
+  \item Middle aisle seats (rows 38-43, seats C \& D)
+  \item Front aisle seats (rows 44-48, seats C \& D)
+\end{enumerate}
+
+\end{document}
