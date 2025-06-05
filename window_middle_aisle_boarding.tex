@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage[landscape, margin=1cm]{geometry}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\begin{document}
+
+\begin{center}
+  \huge Aircraft Boarding Strategy Visualization\\
+  \Large Outside-In (Window-Middle-Aisle) Strategy
+\end{center}
+
+\begin{figure}[ht]
+  \centering
+  \caption{Aircraft Seating Heatmap: Outside-In Boarding Strategy}
+  \label{fig:outside-in-heatmap}
+  \begin{tikzpicture}[scale=0.8]
+    % Seat columns labels (A-F)
+    \foreach \col[count=\j from 1] in {A,B,C,D,E,F}{
+      \node[font=\large\bfseries] at (\j-0.5,0.5) {\col};
+    }
+    
+    % Row labels (28-48)
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \node[font=\large\bfseries, right] at (0,\i*(-1)) {\r};
+    }
+    
+    % Draw seats with different colors based on boarding sequence
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      % Window seats (columns A and F) - board first
+      \fill[blue!70] (0,-\i) rectangle ++(1,-1);
+      \fill[blue!70] (5,-\i) rectangle ++(1,-1);
+      
+      % Middle seats (columns B and E) - board second
+      \fill[green!60] (1,-\i) rectangle ++(1,-1);
+      \fill[green!60] (4,-\i) rectangle ++(1,-1);
+      
+      % Aisle seats (columns C and D) - board last
+      \fill[orange!60] (2,-\i) rectangle ++(1,-1);
+      \fill[orange!60] (3,-\i) rectangle ++(1,-1);
+      
+      % Draw grid lines
+      \foreach \j in {1,...,6}{
+        \draw[thick] (\j-1,-\i) rectangle ++(1,-1);
+      }
+    }
+    
+    % Draw aisle indication
+    \draw[dashed, thick] (3.5, 0) -- (3.5, -22);
+    
+    % Legend
+    \node[anchor=west, align=left, font=\small] at (7, -3) {
+      \textbf{Boarding Sequence:}\\
+      \textcolor{blue!70}{$\blacksquare$} First: Window seats (A, F)\\
+      \textcolor{green!60}{$\blacksquare$} Second: Middle seats (B, E)\\
+      \textcolor{orange!60}{$\blacksquare$} Third: Aisle seats (C, D)
+    };
+    
+    % Title
+    \node[align=center, font=\large\bfseries] at (3.5, 1.5) {Boeing 737-800 Economy Class\\Outside-In Boarding Strategy};
+    
+    % Explanation
+    \node[align=center, font=\normalsize] at (3.5, -23) {
+      Passengers board based on seat position rather than row.\\
+      This minimizes in-row interference during the boarding process.
+    };
+    
+  \end{tikzpicture}
+\end{figure}
+
+\begin{center}
+  \Large Benefits of Outside-In Boarding
+\end{center}
+
+\begin{itemize}
+  \item Minimizes the need for seated passengers to stand up for others to access their seats
+  \item Reduces overall boarding time compared to back-to-front approach (approximately 10 min vs. 12 min)
+  \item Window seat passengers can settle while middle and aisle passengers prepare to board
+  \item Reduces aisle congestion by distributing passengers throughout the aircraft
+\end{itemize}
+
+\begin{center}
+  \Large Comparison to Other Strategies
+\end{center}
+
+\begin{tabular}{|l|p{5cm}|c|}
+  \hline
+  \textbf{Strategy} & \textbf{Description} & \textbf{Approx. Time} \\
+  \hline
+  Outside-In & Board by seat position (Window → Middle → Aisle) & 10 minutes \\
+  Back-to-Front & Board by row from back to front & 12 minutes \\
+  Hybrid Strategy & Combine position and row methods & 10 minutes \\
+  Random & No organization & 22 minutes \\
+  \hline
+\end{tabular}
+
+\end{document}
