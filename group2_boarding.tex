@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[landscape, margin=1cm]{geometry}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\begin{document}
+
+\begin{center}
+  \huge Aircraft Boarding Strategy Visualization\\
+  \Large Second Boarding Group (Rows 33--37)
+\end{center}
+
+\begin{figure}[ht]
+  \centering
+  \caption{Aircraft Seating Heatmap: Current Boarding Group (Rows 33--37)}
+  \label{fig:boarding-heatmap}
+  \begin{tikzpicture}[scale=0.8]
+    % Seat columns labels (A-F)
+    \foreach \col[count=\j from 1] in {A,B,C,D,E,F}{
+      \node[font=\large\bfseries] at (\j-0.5,0.5) {\col};
+    }
+    
+    % Row labels (28-48)
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \node[font=\large\bfseries, right] at (0,\i*(-1)) {\r};
+    }
+    
+    % Cells - rows 28-48, columns A-F
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \foreach \j in {1,...,6}{
+        % Color the cells according to boarding status
+        \ifnum\r<33
+          \fill[blue!30] (\j-1,-\i) rectangle ++(1,-1); % Already boarded
+        \else
+          \ifnum\r<38
+            \fill[red!70] (\j-1,-\i) rectangle ++(1,-1); % Current boarding group
+          \else
+            \fill[gray!10] (\j-1,-\i) rectangle ++(1,-1); % Not yet boarding
+          \fi
+        \fi
+        \draw[thick] (\j-1,-\i) rectangle ++(1,-1);
+      }
+    }
+    
+    % Draw aisle indication
+    \draw[dashed, thick] (3.5, 0) -- (3.5, -22);
+    
+    % Legend
+    \node[anchor=west, align=left, font=\small] at (7, -3) {
+      \textbf{Legend:}\\
+      \textcolor{blue!30}{$\blacksquare$} Already boarded\\
+      \textcolor{red!70}{$\blacksquare$} Current boarding group\\
+      \textcolor{gray!10}{$\blacksquare$} Not yet boarding
+    };
+    
+    % Title
+    \node[align=center, font=\large\bfseries] at (3.5, 1.5) {Boeing 737-800 Economy Class\\Boarding Visualization};
+    
+    % Step indicator
+    \node[align=center, font=\large] at (3.5, -23) {Boarding Step 2 of 4};
+    
+  \end{tikzpicture}
+\end{figure}
+
+\begin{center}
+  \Large Back-to-Front Boarding Strategy
+\end{center}
+
+\begin{itemize}
+  \item First group (rows 28--32) has already boarded
+  \item Second boarding group includes rows 33--37
+  \item Boarding continues from the back toward the front
+  \item Systematic approach reduces aisle congestion
+\end{itemize}
+
+\end{document}
