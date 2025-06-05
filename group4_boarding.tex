@@ -1,0 +1,90 @@
+\documentclass{article}
+\usepackage[landscape, margin=1cm]{geometry}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\begin{document}
+
+\begin{center}
+  \huge Aircraft Boarding Strategy Visualization\\
+  \Large Fourth Boarding Group (Rows 44--48)
+\end{center}
+
+\begin{figure}[ht]
+  \centering
+  \caption{Aircraft Seating Heatmap: Current Boarding Group (Rows 44--48)}
+  \label{fig:boarding-heatmap}
+  \begin{tikzpicture}[scale=0.8]
+    % Seat columns labels (A-F)
+    \foreach \col[count=\j from 1] in {A,B,C,D,E,F}{
+      \node[font=\large\bfseries] at (\j-0.5,0.5) {\col};
+    }
+    
+    % Row labels (28-48)
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \node[font=\large\bfseries, right] at (0,\i*(-1)) {\r};
+    }
+    
+    % Cells - rows 28-48, columns A-F
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \foreach \j in {1,...,6}{
+        % Color the cells according to boarding status
+        \ifnum\r<44
+          \fill[blue!30] (\j-1,-\i) rectangle ++(1,-1); % Already boarded
+        \else
+          \fill[orange!70] (\j-1,-\i) rectangle ++(1,-1); % Current boarding group
+        \fi
+        \draw[thick] (\j-1,-\i) rectangle ++(1,-1);
+      }
+    }
+    
+    % Draw aisle indication
+    \draw[dashed, thick] (3.5, 0) -- (3.5, -22);
+    
+    % Legend
+    \node[anchor=west, align=left, font=\small] at (7, -3) {
+      \textbf{Legend:}\\
+      \textcolor{blue!30}{$\blacksquare$} Already boarded\\
+      \textcolor{orange!70}{$\blacksquare$} Current boarding group
+    };
+    
+    % Title
+    \node[align=center, font=\large\bfseries] at (3.5, 1.5) {Boeing 737-800 Economy Class\\Boarding Visualization};
+    
+    % Step indicator
+    \node[align=center, font=\large] at (3.5, -23) {Boarding Step 4 of 4 (Final)};
+    
+  \end{tikzpicture}
+\end{figure}
+
+\begin{center}
+  \Large Back-to-Front Boarding Strategy
+\end{center}
+
+\begin{itemize}
+  \item First, second, and third groups (rows 28--43) have already boarded
+  \item Final boarding group includes rows 44--48
+  \item Complete back-to-front boarding strategy
+  \item The boarding process will be complete after this group
+\end{itemize}
+
+% Comparison with other strategies
+\begin{center}
+  \Large Boarding Time Comparison
+\end{center}
+
+\begin{tabular}{|l|c|}
+  \hline
+  \textbf{Boarding Strategy} & \textbf{Approx. Boarding Time} \\
+  \hline
+  Back-to-Front & 12 minutes \\
+  Outside-In (Window-Middle-Aisle) & 10 minutes \\
+  Hybrid Strategy & 10 minutes \\
+  Random & 22 minutes \\
+  \hline
+\end{tabular}
+
+\end{document}
