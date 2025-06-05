@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage[landscape, margin=1cm]{geometry}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\begin{document}
+
+\begin{center}
+  \huge Aircraft Boarding Strategy Visualization\\
+  \Large First Boarding Group (Rows 28--32)
+\end{center}
+
+\begin{figure}[ht]
+  \centering
+  \caption{Aircraft Seating Heatmap: Current Boarding Group (Rows 28--32)}
+  \label{fig:boarding-heatmap}
+  \begin{tikzpicture}[scale=0.8]
+    % Seat columns labels (A-F)
+    \foreach \col[count=\j from 1] in {A,B,C,D,E,F}{
+      \node[font=\large\bfseries] at (\j-0.5,0.5) {\col};
+    }
+    
+    % Row labels (28-48)
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \node[font=\large\bfseries, right] at (0,\i*(-1)) {\r};
+    }
+    
+    % Cells - rows 28-48, columns A-F
+    \foreach \r in {28,...,48}{
+      \pgfmathtruncatemacro{\i}{\r-27}
+      \foreach \j in {1,...,6}{
+        % Highlight first boarding group (rows 28-32)
+        \ifnum\r<33
+          \fill[blue!70] (\j-1,-\i) rectangle ++(1,-1);
+        \else
+          \fill[gray!10] (\j-1,-\i) rectangle ++(1,-1);
+        \fi
+        \draw[thick] (\j-1,-\i) rectangle ++(1,-1);
+      }
+    }
+    
+    % Draw aisle indication
+    \draw[dashed, thick] (3.5, 0) -- (3.5, -22);
+    
+    % Legend
+    \node[anchor=west, align=left, font=\small] at (7, -2) {
+      \textbf{Legend:}\\
+      \textcolor{blue!70}{$\blacksquare$} Current boarding group\\
+      \textcolor{gray!10}{$\blacksquare$} Not yet boarding
+    };
+    
+    % Title
+    \node[align=center, font=\large\bfseries] at (3.5, 1.5) {Boeing 737-800 Economy Class\\Boarding Visualization};
+    
+  \end{tikzpicture}
+\end{figure}
+
+\begin{center}
+  \Large Back-to-Front Boarding Strategy
+\end{center}
+
+\begin{itemize}
+  \item First boarding group includes rows 28--32
+  \item Boarding starts from the back of the aircraft
+  \item 6 seats per row in A-F configuration
+  \item Only economy class shown (rows 28--48)
+\end{itemize}
+
+\end{document}
